@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devicelocation
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: devicelocation
+  template:
+    metadata:
+      labels:
+        app: devicelocation
+    spec:
+      containers:
+      - name: devicelocation
+        image: devicelocation:latest
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /location/retrieve/test
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /location/retrieve/test
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
